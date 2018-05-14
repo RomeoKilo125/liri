@@ -1,0 +1,19 @@
+{
+  "name": "liri",
+  "version": "1.0.0",
+  "description": "language recognition twitter bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RomeoKilo125/liri.git"
+  },
+  "author": "RomeoKilo125",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/RomeoKilo125/liri/issues"
+  },
+  "homepage": "https://github.com/RomeoKilo125/liri#readme"
+}
