@@ -31,7 +31,7 @@ function get_Tweets() {
 
 function search_Song(title) {
   let params = {
-    type: '',
+    type: 'The Sign',
     query: '',
     limit: 1
   }
