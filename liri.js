@@ -73,7 +73,11 @@ function search_Song(title) {
   }
 }
 
-
+function search_Movie(title) {
+  request('https://omdbapi.com/?t=' + title + '&apikey=trilogy', function(err, response, body) {
+    
+  });
+}
 
 
 switch (command) {
