@@ -5,6 +5,7 @@ let Spotify = require("node-spotify-api");
 let Twitter = require("twitter");
 let moment = require("moment");
 let request = require("request");
+let fs = require("fs");
 
 let spotify = new Spotify(keys.spotify);
 let twitter = new Twitter(keys.twitter);
@@ -73,12 +74,30 @@ function search_Song(title) {
   }
 }
 
-function search_Movie(title) {
+function search_Movie(title = "Mr. Nobody") {
   request('https://omdbapi.com/?t=' + title + '&apikey=trilogy', function(err, response, body) {
-    
+    let movie = JSON.parse(body);
+    console.log("Title: " + movie.Title);
+    console.log("Year: " + movie.Year);
+    console.log("IMDB: " + movie.imdbRating);
+    for (i of movie.Ratings) {
+      i.Source === 'Rotten Tomatoes' ? console.log(i.Source + ": " + i.Value) : '';
+    }
+    console.log("Country: " + movie.Country);
+    console.log("Language: " + movie.Language);
+    console.log("Plot: " + movie.Plot);
+    console.log("Actors: " + movie.Actors);
   });
 }
 
+if (!command) {
+ fs.readFile("./random.txt", "utf8", function(err, data) {
+    let args = data.split(",");
+    console.log(args);
+    command = args[0];
+    input = args[1].trim();
+  });
+}
 
 switch (command) {
   case 'get-tweets':
@@ -87,9 +106,9 @@ switch (command) {
   case 'spotify-this-song':
     search_Song(input);
     break;
-    case 'movie-this':
+  case 'movie-this':
     search_Movie(input);
     break;
   default:
-
+    console.log("default case");
 }
