@@ -91,12 +91,10 @@ function search_Movie(title = "Mr. Nobody") {
 }
 
 if (!command) {
- fs.readFile("./random.txt", "utf8", function(err, data) {
-    let args = data.split(",");
-    console.log(args);
-    command = args[0];
-    input = args[1].trim();
-  });
+  let data = fs.readFileSync("./random.txt", "utf8");
+  let arr = data.split(',');
+  command = arr[0];
+  input = arr[1];
 }
 
 switch (command) {
