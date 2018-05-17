@@ -13,9 +13,26 @@ let twitter = new Twitter(keys.twitter);
 let command = process.argv[2];
 let input = process.argv[3];
 
+function log_Data(str = '', type = '', time = moment().format('MM/DD/YY hh:mm:ss')) {
+
+  if (type) {
+    fs.appendFileSync('./log.txt', type + " request made at: " + time + '\n');
+  }
+  // log time and text of tweet to console
+  if (str) {
+    console.log(str);
+
+    // lost data to file
+    fs.appendFileSync('./log.txt', str);
+  }
+
+}
+
 function get_Tweets() {
+  log_Data('',"Tweet")
+
   // retrieve tweets from twitter
-  twitter.get('statuses/user_timeline', function(error, response) {
+  twitter.get('statuses/user_timeline', function(err, response) {
     if (err) {
       return console.log(err);
     }
@@ -26,12 +43,15 @@ function get_Tweets() {
       let timestamp = moment(tweet.created_at, 'ddd MMM DD hh:mm:ss ZZ YYYY').format('MM/DD/YY hh:mm:ss')
 
       // log time and text of tweet
-      console.log(timestamp + '  ' + tweet.text);
+      log_Data(timestamp + '  ' + tweet.text + "\n");
     }
+    log_Data('\n')
   });
 }
 
 function search_Song(title) {
+
+  let track = {};
 
   if (title) {
     let params = {
@@ -40,7 +60,6 @@ function search_Song(title) {
       limit: 1
     }
 
-    console.log(params);
     // send search request to Spotify
     spotify.search(params, function(err, response) {
 
@@ -49,45 +68,52 @@ function search_Song(title) {
       }
 
       // set the first track in the response as the result
-      let track = response.tracks.items[0];
-
-      // log the track information
-      console.log("Artist: " + track.artists[0].name);
-      console.log("Song Name: " + track.name);
-      console.log("Preview: " + track.preview_url);
-      console.log("Album Name: " + track.album.name);
+      track = response.tracks.items[0];
 
     });
   } else {
     spotify.request('https://api.spotify.com/v1/tracks/0hrBpAOgrt8RXigk83LLNE').then(function(response) {
 
-      let track = response;
-
-      // log the track information
-      console.log("Artist: " + track.artists[0].name);
-      console.log("Song Name: " + track.name);
-      console.log("Preview: " + track.preview_url);
-      console.log("Album Name: " + track.album.name);
-
+      track = response;
 
     });
   }
+
+  console.log("after call" + JSON.stringify(track, null, 2));
+
+  log_Data("Artist: " + track.artists[0].name + '\n' +
+    "Song Name: " + track.name + '\n' +
+    "Preview: " + track.preview_url + '\n' +
+    "Album Name: " + track.album.name + '\n\n',
+    "Song");
+
 }
 
 function search_Movie(title = "Mr. Nobody") {
+
+  // log request to files
   request('https://omdbapi.com/?t=' + title + '&apikey=trilogy', function(err, response, body) {
     let movie = JSON.parse(body);
-    console.log("Title: " + movie.Title);
-    console.log("Year: " + movie.Year);
-    console.log("IMDB: " + movie.imdbRating);
+    let rtScore = '';
     for (i of movie.Ratings) {
-      i.Source === 'Rotten Tomatoes' ? console.log(i.Source + ": " + i.Value) : '';
+      i.Source === 'Rotten Tomatoes' ?
+        rtScore = i.Value : '';
     }
-    console.log("Country: " + movie.Country);
-    console.log("Language: " + movie.Language);
-    console.log("Plot: " + movie.Plot);
-    console.log("Actors: " + movie.Actors);
+
+    log_Data(
+      "Title: " + movie.Title + '\n' +
+      "Year: " + movie.Year + '\n' +
+      "IMDB Score: " + movie.imdbRating + '\n' +
+      "Rotten Tomatoes Rating: " + rtScore + '\n' +
+      "Country: " + movie.Country + '\n' +
+      "Language: " + movie.Language + '\n' +
+      "Plot: " + movie.Plot + '\n' +
+      "Actors: " + movie.Actors + '\n\n',
+      "Movie"
+    );
+
   });
+
 }
 
 if (!command) {
