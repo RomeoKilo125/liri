@@ -70,22 +70,34 @@ function search_Song(title) {
       // set the first track in the response as the result
       track = response.tracks.items[0];
 
+      log_Data("Artist: " + track.artists[0].name + '\n' +
+        "Song Name: " + track.name + '\n' +
+        "Preview: " + track.preview_url + '\n' +
+        "Album Name: " + track.album.name + '\n\n',
+        "Song");
+
     });
   } else {
     spotify.request('https://api.spotify.com/v1/tracks/0hrBpAOgrt8RXigk83LLNE').then(function(response) {
 
       track = response;
 
+      log_Data("Artist: " + track.artists[0].name + '\n' +
+        "Song Name: " + track.name + '\n' +
+        "Preview: " + track.preview_url + '\n' +
+        "Album Name: " + track.album.name + '\n\n',
+        "Song");
+
     });
   }
 
-  console.log("after call" + JSON.stringify(track, null, 2));
-
-  log_Data("Artist: " + track.artists[0].name + '\n' +
-    "Song Name: " + track.name + '\n' +
-    "Preview: " + track.preview_url + '\n' +
-    "Album Name: " + track.album.name + '\n\n',
-    "Song");
+  // console.log("after call" + JSON.stringify(track, null, 2));
+  //
+  // log_Data("Artist: " + track.artists[0].name + '\n' +
+  //   "Song Name: " + track.name + '\n' +
+  //   "Preview: " + track.preview_url + '\n' +
+  //   "Album Name: " + track.album.name + '\n\n',
+  //   "Song");
 
 }
 
